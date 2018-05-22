@@ -1,0 +1,2 @@
+export const partA = ["Attila the ", "Bravery and ", "Charles in ", "Dog in ", "Edmonton ", "Fake ", "Groovy ", "Hipster ", "Indecent ", "Jobs & "];
+export const partB = ["Law", "Men", "North", "Opera", "Paris", "Queens", "Raid", "Sex", "Trouble", "Uniform", "Vendetta", "Xylophone", "Young", "Zoology"];
