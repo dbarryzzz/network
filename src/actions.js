@@ -3,7 +3,9 @@ import * as nameparts from './randomNames';
 
 export const ADD_EPISODE = "ADD_EPISODE";
 export const ADD_EPISODE_ARRAY = "ADD_EPISODE_ARRAY";
-export const INIT_GAME ="INIT_GAME";
+export const ADD_SERIES = "ADD_SERIES";
+export const ADD_SERIES_ARRAY = "ADD_SERIES_ARRAY";
+export const INIT_GAME = "INIT_GAME";
 
 export function initGame(){
     var playerId = constants.networks[Math.floor(Math.random() * constants.networks.length)];
@@ -13,31 +15,29 @@ export function initGame(){
 
     var gameInfo = {playerId: playerId, year: year, money: money, activeWeek: activeWeek};
 
-    return {
-        type: INIT_GAME,
-        gameInfo: gameInfo,
-    }
-}
-
-export function buildWholeNetwork(){
-    var networkId = constants.networks[Math.floor(Math.random() * constants.networks.length)];
-    var episodeList = [];
+    // build series/episodes
+    var initialEpisodes = [];
+    var initialSeries = [];
+    var seriesCounter = 0;
     for(var d in constants.weekdays){
         var t = 0;
         while(t < constants.times.length) {
-            var series = buildRandomSeries(networkId);
+            var series = buildRandomSeries(playerId, seriesCounter++);
+            initialSeries.push(series);
             var duration = generateDuration(t);
 
             var episode = buildEmptyEpisode(series, d, t, duration);
-            episodeList.push(episode);
+            initialEpisodes.push(episode);
             t += duration;
         }
     }
-    return {
-        type: ADD_EPISODE_ARRAY,
-        episodeArray: episodeList
-    }
 
+    return {
+        type: INIT_GAME,
+        gameInfo: gameInfo,
+        episodeArray: initialEpisodes,
+        seriesArray: initialSeries,
+    }
 }
 
 function generateDuration(t){
@@ -53,15 +53,15 @@ function generateDuration(t){
 }
 
 function buildEmptyEpisode(series, dayOfWeek, time, duration){
-    return {series: series, number: series.episodes, prevRating: null, prevShare: null, dayOfWeek: dayOfWeek, time: time, duration: duration};
+    return {series: series, seriesId: series.id, number: series.episodes, prevRating: null, prevShare: null, dayOfWeek: dayOfWeek, time: time, duration: duration};
 }
 
-function buildRandomSeries(networkId){
+function buildRandomSeries(networkId, counter){
+    var id = networkId + counter;
     var firstYear = 1950 + Math.floor(Math.random() * 70);
     var episodes = 0;
     var name = nameparts.partA[Math.floor(Math.random() * nameparts.partA.length)] 
         + nameparts.partB[Math.floor(Math.random() * nameparts.partB.length)];
-    console.log(name);
-    return {name: name, year: firstYear, networkId: networkId, episodes: episodes}
+    return {name: name, id: id, year: firstYear, networkId: networkId, episodes: episodes}
 }
 

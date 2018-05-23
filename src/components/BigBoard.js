@@ -12,7 +12,6 @@ class BigBoard extends Component{
 
     componentDidMount(){
         this.props.init();
-        this.props.buildSlate();
     }
     
     buildNewSlate(){
@@ -26,7 +25,9 @@ class BigBoard extends Component{
         console.log(sortedEps);
         return sortedEps.map(ep => 
                         <Grid.Column width={ep.duration * 2}>
-                            <EpisodeCard episode={ep}/>
+                            <EpisodeCard 
+                                episode={ep} 
+                                series={this.props.allSeries.filter((s) => s.id == ep.seriesId)[0]}/>
                         </Grid.Column>   
         );
     }
@@ -90,12 +91,12 @@ const mapStateToProps = (state) => {
     return  {
         episodes: state.episodes,
         gameInfo: state.gameInfo,
+        allSeries: state.allSeries,
     }
 }
 
 const mapDispatchToProps  = (dispatch) =>{
     return {
-        buildSlate: () => dispatch(actions.buildWholeNetwork()),
         init: () => dispatch(actions.initGame()),
     }
 }
