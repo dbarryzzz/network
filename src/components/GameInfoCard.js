@@ -17,7 +17,7 @@ const GameInfoCard = ({gameInfo}) => (
                     </List.Item>
                     <List.Item>
                         <Label horizontal>Rank</Label>
-                        #1
+                        #X of Y
                     </List.Item>
                 </List>
          </Card.Description>

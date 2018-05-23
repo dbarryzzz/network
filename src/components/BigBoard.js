@@ -19,14 +19,16 @@ class BigBoard extends Component{
         this.props.buildSlate();
     }
 
-    getEpisodeCard(day, time) {
-        var episode = this.props.episodes.filter((ep) => ep.dayOfWeek == day && ep.time == time);
-        if(episode[0] != null){
-            return  <EpisodeCard episode={episode[0]}/>
-        }
-        else {
-            return (<div><h3>Open</h3></div>);
-        }
+    buildDailyRow(day, i){
+        console.log(day, i);
+        var episodes = this.props.episodes.filter((ep) => ep.dayOfWeek == i);
+        var sortedEps = episodes.sort((a,b) => a.time - b.time);
+        console.log(sortedEps);
+        return sortedEps.map(ep => 
+                        <Grid.Column width={ep.duration * 2}>
+                            <EpisodeCard episode={ep}/>
+                        </Grid.Column>   
+        );
     }
 
     render() {
@@ -38,24 +40,16 @@ class BigBoard extends Component{
                 Let's look at the big board!
                 </p>
 
-                {/* {this.props.episodes.length === 0 &&
-                    <div className="container btn-toolbar">
-                        <button className="btn btn-primary" type="button" onClick={this.buildNewSlate.bind(this)}>Start</button>
-                    </div>
-                } */}
-
-
-
                 <div>
                     <Segment>
-                        <Grid columns={7} divided celled container>
+                        <Grid divided celled container>
                             {/* Header line */}
                             <Grid.Row>
-                                <Grid.Column>
+                                <Grid.Column width={4}>
                                     {/* <h3>Day</h3> */}
                                 </Grid.Column>
                                 {constants.times.map(time =>
-                                    <Grid.Column key={time}>
+                                    <Grid.Column key={time} width={2}>
                                         <h3>{time}</h3>
                                     </Grid.Column>
                                 )}                     
@@ -63,24 +57,21 @@ class BigBoard extends Component{
 
                             {/* Day by Day Line */}
                             {constants.weekdays.map((day, i) =>
+                                (
                                 <Grid.Row key={day}>
-                                    <Grid.Column>
+                                    <Grid.Column width={4}>
                                         <h3>{day}</h3>
                                     </Grid.Column>
 
-                                    {constants.times.map((time, j) =>
-                                        <Grid.Column key={day + time} >
-                                            {this.getEpisodeCard(i,j)}
-                                        </Grid.Column>
-                                    )}
+                                   {this.buildDailyRow(day, i)}
                                 </Grid.Row>
+                                )
                             )}
                         </Grid>
 
                         <Rail attached internal position='left'>
                             <br/>
                             <Segment>
-                                Game Info
                                 <GameInfoCard gameInfo={this.props.gameInfo} />
                             </Segment>
                         </Rail>
@@ -88,11 +79,8 @@ class BigBoard extends Component{
                             <br/>
                             <Segment>Other Shows</Segment>
                         </Rail>
-                    </Segment>
-                    
+                    </Segment>      
                 </div>
-
-               
             </div>
         )
     }
@@ -107,8 +95,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps  = (dispatch) =>{
     return {
-        // functions here
-        //randomShow: () => dispatch(actions.addRandomEpisode()),
         buildSlate: () => dispatch(actions.buildWholeNetwork()),
         init: () => dispatch(actions.initGame()),
     }
