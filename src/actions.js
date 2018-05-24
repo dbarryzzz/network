@@ -19,6 +19,10 @@ export function initGame(){
     var initialEpisodes = [];
     var initialSeries = [];
     var seriesCounter = 0;
+    // for(var i = 0; i < 5; i++){
+    //     var series = buildRandomSeries(playerId, seriesCounter++);
+    //     initialSeries.push(series);
+    // }
     for(var d in constants.weekdays){
         var t = 0;
         while(t < constants.times.length) {
@@ -53,8 +57,7 @@ function generateDuration(t){
 }
 
 function buildEmptyEpisode(series, dayOfWeek, time, duration, weekAired, number){
-    return {series: series, 
-        seriesId: series.id, 
+    return {seriesId: series.id, 
         number: number, 
         weekAired: weekAired,
         prevRating: null, 
@@ -67,9 +70,56 @@ function buildEmptyEpisode(series, dayOfWeek, time, duration, weekAired, number)
 function buildRandomSeries(networkId, counter){
     var id = networkId + counter;
     var firstYear = 1950 + Math.floor(Math.random() * 70);
-    var episodes = 0;
+    var episodeCount = 0;
+    var duration = generateDuration(0);
+    var seasons = Math.ceil(Math.random() * 10);
     var name = nameparts.partA[Math.floor(Math.random() * nameparts.partA.length)] 
         + nameparts.partB[Math.floor(Math.random() * nameparts.partB.length)];
-    return {name: name, id: id, year: firstYear, networkId: networkId, episodes: episodes}
+    var stats = generateSeriesStats();
+    return {name: name, 
+        id: id, 
+        year: firstYear,
+        seasons: seasons,
+        duration: duration,
+        networkId: networkId, 
+        episodeCount: episodeCount,
+        stats: stats}
+}
+
+function generateSeriesStats(){
+    // all on 1-100 scale
+    var buzz = random1to100();  
+    var awareness = random1to100();
+    var fandom = Math.ceil(awareness * random1to100() / 100);  // fandom rating should always be less than general awareness
+
+    var writing = random1to100();
+    var cast = random1to100();
+    var production = random1to100();
+
+    var totalQuality = Math.floor((writing + cast + production) /3);  //TODO: weight this?
+    
+    var flavors = [randomFlavor(), randomFlavor(), randomFlavor()];
+
+    return{
+        buzz: buzz,
+        awareness: awareness,
+        fandom: fandom,
+        writing: writing,
+        cast: cast,
+        production: production,
+        totalQuality: totalQuality,
+        flavors: flavors
+    };
+}
+
+function random1to100(){
+    return Math.ceil(Math.random() * 100);
+}
+
+function randomFlavor(){
+    var icon = constants.flavorIcons[(Math.floor(Math.random() * constants.flavorIcons.length))];
+    var color = constants.flavorColors[(Math.floor(Math.random() * constants.flavorColors.length))];
+
+    return {icon: icon, color: color};
 }
 
