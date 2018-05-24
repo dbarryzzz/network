@@ -14,17 +14,11 @@ class BigBoard extends Component{
         this.props.init();
     }
     
-    buildNewSlate(){
-        this.props.buildSlate();
-    }
-
     buildDailyRow(day, i){
-        console.log(day, i);
         var episodes = this.props.episodes.filter((ep) => ep.dayOfWeek == i);
         var sortedEps = episodes.sort((a,b) => a.time - b.time);
-        console.log(sortedEps);
         return sortedEps.map(ep => 
-                        <Grid.Column width={ep.duration * 2}>
+                        <Grid.Column key={day + ep.time} width={ep.duration * 2} >
                             <EpisodeCard 
                                 episode={ep} 
                                 series={this.props.allSeries.filter((s) => s.id == ep.seriesId)[0]}/>

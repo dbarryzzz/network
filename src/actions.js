@@ -26,7 +26,7 @@ export function initGame(){
             initialSeries.push(series);
             var duration = generateDuration(t);
 
-            var episode = buildEmptyEpisode(series, d, t, duration);
+            var episode = buildEmptyEpisode(series, d, t, duration, 1, 1);
             initialEpisodes.push(episode);
             t += duration;
         }
@@ -52,8 +52,16 @@ function generateDuration(t){
     }
 }
 
-function buildEmptyEpisode(series, dayOfWeek, time, duration){
-    return {series: series, seriesId: series.id, number: series.episodes, prevRating: null, prevShare: null, dayOfWeek: dayOfWeek, time: time, duration: duration};
+function buildEmptyEpisode(series, dayOfWeek, time, duration, weekAired, number){
+    return {series: series, 
+        seriesId: series.id, 
+        number: number, 
+        weekAired: weekAired,
+        prevRating: null, 
+        prevShare: null, 
+        dayOfWeek: dayOfWeek, 
+        time: time, 
+        duration: duration};
 }
 
 function buildRandomSeries(networkId, counter){
