@@ -1,11 +1,16 @@
 import * as constants from './constants';
 import * as nameparts from './randomNames';
 
+import * as RatingsService from './services/RatingsService';
+
 export const ADD_EPISODE = "ADD_EPISODE";
 export const ADD_EPISODE_ARRAY = "ADD_EPISODE_ARRAY";
 export const ADD_SERIES = "ADD_SERIES";
 export const ADD_SERIES_ARRAY = "ADD_SERIES_ARRAY";
 export const INIT_GAME = "INIT_GAME";
+
+export const UPDATE_EPISODE_ARRAY = "UPDATE_EPISODE_ARRAY";
+export const UPDATE_SERIES_ARRAY = "UPDATE_SERIES_ARRAY";
 
 export function initGame(){
     var playerId = constants.networks[Math.floor(Math.random() * constants.networks.length)];
@@ -44,6 +49,15 @@ export function initGame(){
     }
 }
 
+export function runWeek(activeEpisodes, allSeries, week){
+    var updatedEpisodes = RatingsService.runWeek(activeEpisodes, allSeries, week);
+
+    return {
+        type: UPDATE_EPISODE_ARRAY,
+        updatedEpisodeArray: updatedEpisodes,
+    }
+}
+
 function generateDuration(t){
     // the 8pm and 9pm blocks can be divided in 1 unit duration, others 2 for now
     // 1 duration unit == 30 minutes
@@ -59,9 +73,12 @@ function generateDuration(t){
 function buildEmptyEpisode(series, dayOfWeek, time, duration, weekAired, number){
     return {seriesId: series.id, 
         number: number, 
+        episodeId: series.id + "_" + number,
         weekAired: weekAired,
         prevRating: null, 
         prevShare: null, 
+        rating: null,
+        share: null,
         dayOfWeek: dayOfWeek, 
         time: time, 
         duration: duration};

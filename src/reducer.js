@@ -29,6 +29,15 @@ export default function reducer(state={
                 episodes: state.episodes.concat(action.episodeArray),
             }
         }
+        case actions.UPDATE_EPISODE_ARRAY: {
+            var updatedIds = action.updatedEpisodeArray.map((e) => e.episodeId);
+            return {
+                ...state,
+                episodes: state.episodes
+                    .filter((ep) => !updatedIds.includes(ep.episodeId))
+                    .concat(action.updatedEpisodeArray),
+            }
+        }
         case actions.ADD_SERIES:{
             return {
                 ...state,
@@ -39,6 +48,15 @@ export default function reducer(state={
             return {
                 ...state,
                 allSeries: state.allSeries.concat(action.seriesArray),
+            }
+        }
+        case actions.UPDATE_SERIES_ARRAY: {
+            var updatedSeriesIds = action.updatedSeriesArray.map((s) => s.id);
+            return {
+                ...state,
+                episodes: state.allSeries
+                    .filter((s) => !updatedSeriesIds.includes(s.id))
+                    .concat(action.updatedSeriesArray),
             }
         }
         default: {

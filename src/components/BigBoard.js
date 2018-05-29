@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { Grid, Header, Segment, Rail } from 'semantic-ui-react'
+import { Grid, Header, Segment, Rail, Button } from 'semantic-ui-react'
 
 import EpisodeCard from './EpisodeCard';
 import GameInfoCard from './GameInfoCard';
@@ -12,6 +12,10 @@ class BigBoard extends Component{
 
     componentDidMount(){
         this.props.init();
+    }
+
+    processWeek(){
+        this.props.runWeek(this.props.episodes, this.props.allSeries, this.props.gameInfo.activeWeek);
     }
     
     buildDailyRow(day, i){
@@ -34,6 +38,8 @@ class BigBoard extends Component{
                 <p className="App-intro">
                 Let's look at the big board!
                 </p>
+
+                <Button primary onClick={this.processWeek.bind(this)}>Run Week</Button>
 
                 <div>
                     <Segment>
@@ -92,6 +98,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps  = (dispatch) =>{
     return {
         init: () => dispatch(actions.initGame()),
+        runWeek: (activeEpisodes, allSeries, week) => dispatch(actions.runWeek(activeEpisodes, allSeries, week)), 
     }
 }
 

@@ -14,7 +14,7 @@ const EpisodeCard = ({episode, series}) => (
          <Card.Content extra>
             <div>
                 <Label>Rating/Share</Label>
-                {episode.prevRating} / {episode.prevShare}
+                {episode.rating} / {episode.share}
             </div>
             <div>
                 <Label>Buzz/Q/Fans</Label>
