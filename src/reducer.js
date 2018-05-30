@@ -4,6 +4,7 @@ import * as actions from "./actions";
 export default function reducer(state={
     episodes : [],
     allSeries: {byId: {}},
+    weekInfo: {id: null, episodes: []},
     gameInfo: {}
 }, action) {
     // case statements here
@@ -13,6 +14,7 @@ export default function reducer(state={
             return {
                 ...state,
                 gameInfo: action.gameInfo,
+                weekInfo: action.initialWeekInfo,
                 allSeries: {byId: Object.assign({}, state.allSeries.byId, action.seriesById)},
                 episodes: state.episodes.concat(action.episodeArray)
             }

@@ -24,16 +24,21 @@ export function initGame(){
     var initialEpisodes = [];
     var initialSeries = {};
     var seriesCounter = 0;
-    // for(var i = 0; i < 5; i++){
-    //     var series = buildRandomSeries(playerId, seriesCounter++);
-    //     initialSeries.push(series);
-    // }
+
+    // generate bench
+    for(var i = 0; i < 5; i++){
+        var duration = generateDuration(0);
+        var series = buildRandomSeries(playerId, seriesCounter++, duration);
+        initialSeries[series.id] = series;
+    }
+
+    // generate initial schedule
     for(var d in constants.weekdays){
         var t = 0;
         while(t < constants.times.length) {
-            var series = buildRandomSeries(playerId, seriesCounter++);
-            initialSeries[series.id] = series;
             var duration = generateDuration(t);
+            var series = buildRandomSeries(playerId, seriesCounter++, duration);
+            initialSeries[series.id] = series;
 
             var episode = buildEmptyEpisode(series, d, t, duration, 1, 1);
             initialEpisodes.push(episode);
@@ -41,9 +46,12 @@ export function initGame(){
         }
     }
 
+    var initialWeekInfo = {1 : {id: 1, episodes: initialEpisodes} };
+
     return {
         type: INIT_GAME,
         gameInfo: gameInfo,
+        initialWeekInfo: initialWeekInfo,
         episodeArray: initialEpisodes,
         seriesById: initialSeries,
     }
@@ -84,11 +92,10 @@ function buildEmptyEpisode(series, dayOfWeek, time, duration, weekAired, number)
         duration: duration};
 }
 
-function buildRandomSeries(networkId, counter){
+function buildRandomSeries(networkId, counter, duration){
     var id = networkId + counter;
     var firstYear = 1950 + Math.floor(Math.random() * 70);
-    var episodeCount = 0;
-    var duration = generateDuration(0);
+    var episodeCount = 22;
     var seasons = Math.ceil(Math.random() * 10);
     var name = nameparts.partA[Math.floor(Math.random() * nameparts.partA.length)] 
         + nameparts.partB[Math.floor(Math.random() * nameparts.partB.length)];
