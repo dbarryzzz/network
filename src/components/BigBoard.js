@@ -15,7 +15,7 @@ class BigBoard extends Component{
     }
 
     processWeek(){
-        this.props.runWeek(this.props.episodes, this.props.allSeries, this.props.gameInfo.activeWeek);
+        this.props.runWeek(this.props.episodes, this.props.seriesById, this.props.gameInfo.activeWeek);
     }
     
     buildDailyRow(day, i){
@@ -25,7 +25,7 @@ class BigBoard extends Component{
                         <Grid.Column key={day + ep.time} width={ep.duration * 2} >
                             <EpisodeCard 
                                 episode={ep} 
-                                series={this.props.allSeries.filter((s) => s.id == ep.seriesId)[0]}/>
+                                series={this.props.seriesById[ep.seriesId]}/>
                         </Grid.Column>   
         );
     }
@@ -91,14 +91,14 @@ const mapStateToProps = (state) => {
     return  {
         episodes: state.episodes,
         gameInfo: state.gameInfo,
-        allSeries: state.allSeries,
+        seriesById: state.allSeries.byId,
     }
 }
 
 const mapDispatchToProps  = (dispatch) =>{
     return {
         init: () => dispatch(actions.initGame()),
-        runWeek: (activeEpisodes, allSeries, week) => dispatch(actions.runWeek(activeEpisodes, allSeries, week)), 
+        runWeek: (activeEpisodes, seriesById, week) => dispatch(actions.runWeek(activeEpisodes, seriesById, week)), 
     }
 }
 

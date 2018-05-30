@@ -22,7 +22,7 @@ export function initGame(){
 
     // build series/episodes
     var initialEpisodes = [];
-    var initialSeries = [];
+    var initialSeries = {};
     var seriesCounter = 0;
     // for(var i = 0; i < 5; i++){
     //     var series = buildRandomSeries(playerId, seriesCounter++);
@@ -32,7 +32,7 @@ export function initGame(){
         var t = 0;
         while(t < constants.times.length) {
             var series = buildRandomSeries(playerId, seriesCounter++);
-            initialSeries.push(series);
+            initialSeries[series.id] = series;
             var duration = generateDuration(t);
 
             var episode = buildEmptyEpisode(series, d, t, duration, 1, 1);
@@ -45,7 +45,7 @@ export function initGame(){
         type: INIT_GAME,
         gameInfo: gameInfo,
         episodeArray: initialEpisodes,
-        seriesArray: initialSeries,
+        seriesById: initialSeries,
     }
 }
 

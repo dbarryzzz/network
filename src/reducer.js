@@ -3,7 +3,7 @@ import * as actions from "./actions";
 
 export default function reducer(state={
     episodes : [],
-    allSeries: [],
+    allSeries: {byId: {}},
     gameInfo: {}
 }, action) {
     // case statements here
@@ -13,7 +13,7 @@ export default function reducer(state={
             return {
                 ...state,
                 gameInfo: action.gameInfo,
-                allSeries: state.allSeries.concat(action.seriesArray),
+                allSeries: {byId: Object.assign({}, state.allSeries.byId, action.seriesById)},
                 episodes: state.episodes.concat(action.episodeArray)
             }
         }
@@ -36,27 +36,6 @@ export default function reducer(state={
                 episodes: state.episodes
                     .filter((ep) => !updatedIds.includes(ep.episodeId))
                     .concat(action.updatedEpisodeArray),
-            }
-        }
-        case actions.ADD_SERIES:{
-            return {
-                ...state,
-                allSeries: state.allSeries.concat(action.series),
-            }
-        }
-        case actions.ADD_SERIES_ARRAY:{
-            return {
-                ...state,
-                allSeries: state.allSeries.concat(action.seriesArray),
-            }
-        }
-        case actions.UPDATE_SERIES_ARRAY: {
-            var updatedSeriesIds = action.updatedSeriesArray.map((s) => s.id);
-            return {
-                ...state,
-                episodes: state.allSeries
-                    .filter((s) => !updatedSeriesIds.includes(s.id))
-                    .concat(action.updatedSeriesArray),
             }
         }
         default: {

@@ -10,7 +10,7 @@ const viewerFanAttachment = 0.9; // viewer's willingness to view a favorite show
 const viewerCuriosity = 0.4;    // viewer's willingness to view a known show
 const viewerExploration = 0.1;  // viewer's willingness to view an unknown show
 
-export function runWeek(episodes, allSeries, week){
+export function runWeek(episodes, seriesById, week){
     // for now this is single network
     var updatedEpisodes = [];
 
@@ -23,7 +23,7 @@ export function runWeek(episodes, allSeries, week){
         // run day by day
         var dailyEpisodes = getDailyEpisodes(episodes, d);
         dailyEpisodes.forEach(e => {
-            var series = findSeries(allSeries, e.seriesId);
+            var series = seriesById[e.seriesId];
             leadIn = (e.time == 0 ? baseLeadIn : leadIn);
             var retainedRating = leadIn * channelStickiness;  // TODO: max flavor alignment affect retention
             var recruitedViewers = (series.stats.fandom * viewerFanAttachment) 
@@ -48,8 +48,4 @@ export function runWeek(episodes, allSeries, week){
 
 function getDailyEpisodes(episodes, day){
     return episodes.filter((ep) => ep.dayOfWeek == day).sort((a,b) => a.time - b.time);
-}
-
-function findSeries(allSeries, seriesId){
-    return allSeries.filter((s) => s.id == seriesId)[0];
 }
