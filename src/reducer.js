@@ -2,10 +2,10 @@ import * as actions from "./actions";
 
 
 export default function reducer(state={
-    episodes : [],
+    allEpisodes : {byId: {}},
     allSeries: {byId: {}},
-    weekInfo: {id: null, episodes: []},
-    gameInfo: {}
+    weekInfo: {1: {id: 1, episodes: []}},
+    gameInfo: {activeWeek: 1}
 }, action) {
     // case statements here
     console.log(action);
@@ -16,28 +16,13 @@ export default function reducer(state={
                 gameInfo: action.gameInfo,
                 weekInfo: action.initialWeekInfo,
                 allSeries: {byId: Object.assign({}, state.allSeries.byId, action.seriesById)},
-                episodes: state.episodes.concat(action.episodeArray)
+                allEpisodes: {byId: Object.assign({}, state.allEpisodes.byId, action.episodesById)}
             }
         }
-        case actions.ADD_EPISODE: {
+        case actions.UPDATE_EPISODES: {
             return {
                 ...state,
-                episodes: state.episodes.concat(action.newEpisode),
-            }
-        }
-        case actions.ADD_EPISODE_ARRAY: {
-            return {
-                ...state,
-                episodes: state.episodes.concat(action.episodeArray),
-            }
-        }
-        case actions.UPDATE_EPISODE_ARRAY: {
-            var updatedIds = action.updatedEpisodeArray.map((e) => e.episodeId);
-            return {
-                ...state,
-                episodes: state.episodes
-                    .filter((ep) => !updatedIds.includes(ep.episodeId))
-                    .concat(action.updatedEpisodeArray),
+                allEpisodes: {byId: Object.assign({}, state.allEpisodes.byId, action.updatedEpisodesById)}
             }
         }
         default: {

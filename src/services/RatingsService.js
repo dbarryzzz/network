@@ -10,9 +10,9 @@ const viewerFanAttachment = 0.9; // viewer's willingness to view a favorite show
 const viewerCuriosity = 0.4;    // viewer's willingness to view a known show
 const viewerExploration = 0.1;  // viewer's willingness to view an unknown show
 
-export function runWeek(episodes, seriesById, week){
+export function runWeek(episodeArray, seriesById, week){
     // for now this is single network
-    var updatedEpisodes = [];
+    var updatedEpisodes = {};
 
     // top rated ~15
     // 30th ~7-8
@@ -21,7 +21,7 @@ export function runWeek(episodes, seriesById, week){
     // eventually compare against other shows at that time, for now it's show-specific
     for(var d in constants.weekdays){
         // run day by day
-        var dailyEpisodes = getDailyEpisodes(episodes, d);
+        var dailyEpisodes = getDailyEpisodes(episodeArray, d);
         dailyEpisodes.forEach(e => {
             var series = seriesById[e.seriesId];
             leadIn = (e.time == 0 ? baseLeadIn : leadIn);
@@ -39,7 +39,7 @@ export function runWeek(episodes, seriesById, week){
             leadIn = rating;
             e.rating = rating;
             e.share = share;
-            updatedEpisodes.push(e);
+            updatedEpisodes[e.id] = e;
         })
     }
 

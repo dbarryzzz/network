@@ -3,14 +3,9 @@ import * as nameparts from './randomNames';
 
 import * as RatingsService from './services/RatingsService';
 
-export const ADD_EPISODE = "ADD_EPISODE";
-export const ADD_EPISODE_ARRAY = "ADD_EPISODE_ARRAY";
-export const ADD_SERIES = "ADD_SERIES";
-export const ADD_SERIES_ARRAY = "ADD_SERIES_ARRAY";
 export const INIT_GAME = "INIT_GAME";
+export const UPDATE_EPISODES = "UPDATE_EPISODE_ARRAY";
 
-export const UPDATE_EPISODE_ARRAY = "UPDATE_EPISODE_ARRAY";
-export const UPDATE_SERIES_ARRAY = "UPDATE_SERIES_ARRAY";
 
 export function initGame(){
     var playerId = constants.networks[Math.floor(Math.random() * constants.networks.length)];
@@ -21,14 +16,16 @@ export function initGame(){
     var gameInfo = {playerId: playerId, year: year, money: money, activeWeek: activeWeek};
 
     // build series/episodes
-    var initialEpisodes = [];
+    var initialEpisodes = {};
     var initialSeries = {};
     var seriesCounter = 0;
 
+    var duration = 0;
+    var series = null;
     // generate bench
     for(var i = 0; i < 5; i++){
-        var duration = generateDuration(0);
-        var series = buildRandomSeries(playerId, seriesCounter++, duration);
+        duration = generateDuration(0);
+        series = buildRandomSeries(playerId, seriesCounter++, duration);
         initialSeries[series.id] = series;
     }
 
@@ -36,33 +33,33 @@ export function initGame(){
     for(var d in constants.weekdays){
         var t = 0;
         while(t < constants.times.length) {
-            var duration = generateDuration(t);
-            var series = buildRandomSeries(playerId, seriesCounter++, duration);
+            duration = generateDuration(t);
+            series = buildRandomSeries(playerId, seriesCounter++, duration);
             initialSeries[series.id] = series;
 
             var episode = buildEmptyEpisode(series, d, t, duration, 1, 1);
-            initialEpisodes.push(episode);
+            initialEpisodes[episode.id] = episode;
             t += duration;
         }
     }
 
-    var initialWeekInfo = {1 : {id: 1, episodes: initialEpisodes} };
+    var initialWeekInfo = {1 : {id: 1, episodes: Object.keys(initialEpisodes)} };
 
     return {
         type: INIT_GAME,
         gameInfo: gameInfo,
         initialWeekInfo: initialWeekInfo,
-        episodeArray: initialEpisodes,
+        episodesById: initialEpisodes,
         seriesById: initialSeries,
     }
 }
 
-export function runWeek(activeEpisodes, allSeries, week){
-    var updatedEpisodes = RatingsService.runWeek(activeEpisodes, allSeries, week);
+export function runWeek(activeEpisodeArray, allSeries, week){
+    var updatedEpisodes = RatingsService.runWeek(activeEpisodeArray, allSeries, week);
 
     return {
-        type: UPDATE_EPISODE_ARRAY,
-        updatedEpisodeArray: updatedEpisodes,
+        type: UPDATE_EPISODES,
+        updatedEpisodesById: updatedEpisodes,
     }
 }
 
@@ -81,7 +78,7 @@ function generateDuration(t){
 function buildEmptyEpisode(series, dayOfWeek, time, duration, weekAired, number){
     return {seriesId: series.id, 
         number: number, 
-        episodeId: series.id + "_" + number,
+        id: series.id + "_" + number,
         weekAired: weekAired,
         prevRating: null, 
         prevShare: null, 

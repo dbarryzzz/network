@@ -28,6 +28,7 @@ class BigBoard extends Component{
                                 series={this.props.seriesById[ep.seriesId]}/>
                         </Grid.Column>   
         );
+         
     }
 
     render() {
@@ -87,9 +88,13 @@ class BigBoard extends Component{
     }
 }
 
+function selectEpisodes(episodesById, weekInfo){
+    return weekInfo.episodes.map(id => episodesById[id]);
+}
+
 const mapStateToProps = (state) => {
     return  {
-        episodes: state.episodes,
+        episodes: selectEpisodes(state.allEpisodes.byId, state.weekInfo[state.gameInfo.activeWeek]),
         gameInfo: state.gameInfo,
         seriesById: state.allSeries.byId,
     }
