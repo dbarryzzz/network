@@ -45,74 +45,75 @@ class BigBoard extends Component{
     render() {
         return (
             <div>
-                <br/>
-                <Header as='h2'>Schedule - Week {this.props.gameInfo.activeWeek}</Header>
-                
-                <Button.Group>
-                    {this.props.gameInfo.activeWeek > 1 &&
-                        <Button secondary icon onClick={this.decrementWeek.bind(this)} >
-                            <Icon name="chevron left" />
+                <Segment>
+                    <Header as='h2'>Schedule - Week {this.props.gameInfo.activeWeek}</Header>
+
+                    <p className="App-intro">
+                        Let's look at the big board!
+                    </p>
+
+                    <div>
+                        <Button secondary icon labelPosition='left'
+                            onClick={this.decrementWeek.bind(this)} 
+                            disabled={this.props.gameInfo.activeWeek > 1 ? false : true}>
+                            <Icon color='yellow' name="chevron left" />
+                            Prev
                         </Button>
-                    }
-                    {this.props.gameInfo.activeWeek < this.props.gameInfo.totalWeeks &&
-                        <Button secondary icon onClick={this.incrementWeek.bind(this)} >
-                            <Icon name="chevron right" />
+
+                        <Button primary 
+                            onClick={this.processWeek.bind(this)}
+                            disabled={this.props.weekInfo.aired ? true : false}>
+                            Run Week # {this.props.gameInfo.activeWeek}
                         </Button>
-                    }
-                </Button.Group>
 
+                        <Button secondary icon labelPosition='right'
+                            onClick={this.incrementWeek.bind(this)}
+                            disabled={this.props.gameInfo.activeWeek < this.props.gameInfo.totalWeeks ? false : true} >
+                            <Icon color='yellow' name="chevron right" />
+                            Next
+                        </Button>
+                    </div>
+                </Segment>
 
-                <p className="App-intro">
-                Let's look at the big board!
-                </p>
-
-                <div>
-                    {!this.props.weekInfo.aired &&
-                        <Button primary onClick={this.processWeek.bind(this)}>Run Week</Button>
-                    }
-                </div>
-
-                <div>
-                    <Segment>
-                        <Grid divided celled container>
-                            {/* Header line */}
-                            <Grid.Row>
-                                <Grid.Column width={4}>
-                                    {/* <h3>Day</h3> */}
+                <Segment>
+                    <Grid divided celled container>
+                        {/* Header line */}
+                        <Grid.Row>
+                            <Grid.Column width={4}>
+                                {/* <h3>Day</h3> */}
+                            </Grid.Column>
+                            {constants.times.map(time =>
+                                <Grid.Column key={time} width={2}>
+                                    <h3>{time}</h3>
                                 </Grid.Column>
-                                {constants.times.map(time =>
-                                    <Grid.Column key={time} width={2}>
-                                        <h3>{time}</h3>
-                                    </Grid.Column>
-                                )}                     
+                            )}                     
+                        </Grid.Row>
+
+                        {/* Day by Day Line */}
+                        {constants.weekdays.map((day, i) =>
+                            (
+                            <Grid.Row key={day}>
+                                <Grid.Column width={4}>
+                                    <h3>{day}</h3>
+                                </Grid.Column>
+
+                                {this.buildDailyRow(day, i)}
                             </Grid.Row>
+                            )
+                        )}
+                    </Grid>
 
-                            {/* Day by Day Line */}
-                            {constants.weekdays.map((day, i) =>
-                                (
-                                <Grid.Row key={day}>
-                                    <Grid.Column width={4}>
-                                        <h3>{day}</h3>
-                                    </Grid.Column>
-
-                                   {this.buildDailyRow(day, i)}
-                                </Grid.Row>
-                                )
-                            )}
-                        </Grid>
-
-                        <Rail attached internal position='left'>
-                            <br/>
-                            <Segment>
-                                <GameInfoCard gameInfo={this.props.gameInfo} />
-                            </Segment>
-                        </Rail>
-                        <Rail attached internal position='right'>
-                            <br/>
-                            <Segment>Other Shows</Segment>
-                        </Rail>
-                    </Segment>      
-                </div>
+                    <Rail attached internal position='left'>
+                        <br/>
+                        <Segment>
+                            <GameInfoCard gameInfo={this.props.gameInfo} />
+                        </Segment>
+                    </Rail>
+                    <Rail attached internal position='right'>
+                        <br/>
+                        <Segment>Other Shows</Segment>
+                    </Rail>
+                </Segment>      
             </div>
         )
     }
