@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { Grid, Header, Segment, Rail, Button } from 'semantic-ui-react'
+import { Grid, Header, Segment, Rail, Button, Icon } from 'semantic-ui-react'
 
 import EpisodeCard from './EpisodeCard';
 import GameInfoCard from './GameInfoCard';
@@ -16,6 +16,17 @@ class BigBoard extends Component{
 
     processWeek(){
         this.props.runWeek(this.props.episodes, this.props.seriesById, this.props.gameInfo.activeWeek);
+    }
+
+    decrementWeek(){
+        var newWeek = Math.max(this.props.gameInfo.activeWeek - 1, 1);
+        this.props.changeWeek(newWeek);
+    }
+
+    incrementWeek(){
+        var newWeek = Math.min(this.props.gameInfo.activeWeek + 1, this.props.gameInfo.totalWeeks);
+        console.log(newWeek);
+        this.props.changeWeek(newWeek);
     }
     
     buildDailyRow(day, i){
@@ -35,12 +46,31 @@ class BigBoard extends Component{
         return (
             <div>
                 <br/>
-                <Header as='h2'>Schedule - Week {this.props.gameInfo.activeWeek} </Header>
+                <Header as='h2'>Schedule - Week {this.props.gameInfo.activeWeek}</Header>
+                
+                <Button.Group>
+                    {this.props.gameInfo.activeWeek > 1 &&
+                        <Button secondary icon onClick={this.decrementWeek.bind(this)} >
+                            <Icon name="chevron left" />
+                        </Button>
+                    }
+                    {this.props.gameInfo.activeWeek < this.props.gameInfo.totalWeeks &&
+                        <Button secondary icon onClick={this.incrementWeek.bind(this)} >
+                            <Icon name="chevron right" />
+                        </Button>
+                    }
+                </Button.Group>
+
+
                 <p className="App-intro">
                 Let's look at the big board!
                 </p>
 
-                <Button primary onClick={this.processWeek.bind(this)}>Run Week</Button>
+                <div>
+                    {!this.props.weekInfo.aired &&
+                        <Button primary onClick={this.processWeek.bind(this)}>Run Week</Button>
+                    }
+                </div>
 
                 <div>
                     <Segment>
@@ -97,13 +127,15 @@ const mapStateToProps = (state) => {
         episodes: selectEpisodes(state.allEpisodes.byId, state.weekInfo[state.gameInfo.activeWeek]),
         gameInfo: state.gameInfo,
         seriesById: state.allSeries.byId,
+        weekInfo: state.weekInfo[state.gameInfo.activeWeek],
     }
 }
 
 const mapDispatchToProps  = (dispatch) =>{
     return {
         init: () => dispatch(actions.initGame()),
-        runWeek: (activeEpisodes, seriesById, week) => dispatch(actions.runWeek(activeEpisodes, seriesById, week)), 
+        runWeek: (activeEpisodes, seriesById, week) => dispatch(actions.runWeek(activeEpisodes, seriesById, week)),
+        changeWeek: (newWeek) => dispatch(actions.changeWeek(newWeek)), 
     }
 }
 

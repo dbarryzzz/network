@@ -5,6 +5,8 @@ import * as RatingsService from './services/RatingsService';
 
 export const INIT_GAME = "INIT_GAME";
 export const UPDATE_EPISODES = "UPDATE_EPISODE_ARRAY";
+export const RUN_WEEK = "RUN_WEEK";
+export const CHANGE_WEEK = "CHANGE_WEEK";
 
 
 export function initGame(){
@@ -13,7 +15,7 @@ export function initGame(){
     var money = 200000;
     var activeWeek = 1;
 
-    var gameInfo = {playerId: playerId, year: year, money: money, activeWeek: activeWeek};
+    var gameInfo = {playerId: playerId, year: year, money: money, activeWeek: activeWeek, totalWeeks: 1};
 
     // build series/episodes
     var initialEpisodes = {};
@@ -37,13 +39,13 @@ export function initGame(){
             series = buildRandomSeries(playerId, seriesCounter++, duration);
             initialSeries[series.id] = series;
 
-            var episode = buildEmptyEpisode(series, d, t, duration, 1, 1);
+            var episode = buildEmptyEpisode(series.id, d, t, duration, 1, 1);
             initialEpisodes[episode.id] = episode;
             t += duration;
         }
     }
 
-    var initialWeekInfo = {1 : {id: 1, episodes: Object.keys(initialEpisodes)} };
+    var initialWeekInfo = {1 : {id: 1, aired: false, episodes: Object.keys(initialEpisodes)} };
 
     return {
         type: INIT_GAME,
@@ -56,10 +58,32 @@ export function initGame(){
 
 export function runWeek(activeEpisodeArray, allSeries, week){
     var updatedEpisodes = RatingsService.runWeek(activeEpisodeArray, allSeries, week);
+    
+    // TODO: update series stats
+
+    // build the next week
+    var newEpisodes = {};
+    Object.values(updatedEpisodes).forEach(ep => {
+        var newEp = buildEmptyEpisode(ep.seriesId, ep.dayOfWeek, ep.time, ep.duration, ++ep.weekAired, ++ep.number);
+        console.log(newEp);
+        newEp.prevRating = ep.rating;
+        newEp.prevShare = ep.share;
+
+        newEpisodes[newEp.id] = newEp;
+    });
 
     return {
-        type: UPDATE_EPISODES,
+        type: RUN_WEEK,
+        weekRun: week,
         updatedEpisodesById: updatedEpisodes,
+        newEpisodesById: newEpisodes,
+    }
+}
+
+export function changeWeek(newWeek){
+    return {
+        type: CHANGE_WEEK,
+        week: newWeek,
     }
 }
 
@@ -75,10 +99,10 @@ function generateDuration(t){
     }
 }
 
-function buildEmptyEpisode(series, dayOfWeek, time, duration, weekAired, number){
-    return {seriesId: series.id, 
+function buildEmptyEpisode(seriesId, dayOfWeek, time, duration, weekAired, number){
+    return {seriesId: seriesId, 
         number: number, 
-        id: series.id + "_" + number,
+        id: seriesId + "_" + number,
         weekAired: weekAired,
         prevRating: null, 
         prevShare: null, 
