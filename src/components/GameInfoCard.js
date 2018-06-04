@@ -19,6 +19,11 @@ const GameInfoCard = ({gameInfo}) => (
                         <Label horizontal>Rank</Label>
                         #X of Y
                     </List.Item>
+                    <List.Item>
+                        <Label horizontal>Total Weeks</Label>
+                        {gameInfo.totalWeeks}
+                    </List.Item>
+
                 </List>
          </Card.Description>
     </Card> 

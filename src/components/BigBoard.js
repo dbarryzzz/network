@@ -38,8 +38,7 @@ class BigBoard extends Component{
                                 episode={ep} 
                                 series={this.props.seriesById[ep.seriesId]}/>
                         </Grid.Column>   
-        );
-         
+        );       
     }
 
     render() {
@@ -79,25 +78,32 @@ class BigBoard extends Component{
                     <Grid divided celled container>
                         {/* Header line */}
                         <Grid.Row>
-                            <Grid.Column width={4}>
+                            <Grid.Column width={2}>
                                 {/* <h3>Day</h3> */}
                             </Grid.Column>
                             {constants.times.map(time =>
                                 <Grid.Column key={time} width={2}>
                                     <h3>{time}</h3>
                                 </Grid.Column>
-                            )}                     
+                            )}   
+                            <Grid.Column width={2}>
+                                <h3>Totals</h3>
+                             </Grid.Column>                   
                         </Grid.Row>
 
                         {/* Day by Day Line */}
                         {constants.weekdays.map((day, i) =>
                             (
                             <Grid.Row key={day}>
-                                <Grid.Column width={4}>
+                                <Grid.Column width={2}>
                                     <h3>{day}</h3>
                                 </Grid.Column>
 
                                 {this.buildDailyRow(day, i)}
+
+                                <Grid.Column width={2}>
+                                    <h3>Stats Here</h3>
+                                </Grid.Column>
                             </Grid.Row>
                             )
                         )}
