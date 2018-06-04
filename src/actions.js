@@ -64,7 +64,7 @@ export function runWeek(activeEpisodeArray, allSeries, week){
     // build the next week
     var newEpisodes = {};
     Object.values(updatedEpisodes).forEach(ep => {
-        var newEp = buildEmptyEpisode(ep.seriesId, ep.dayOfWeek, ep.time, ep.duration, ++ep.weekAired, ++ep.number);
+        var newEp = buildEmptyEpisode(ep.seriesId, ep.dayOfWeek, ep.time, ep.duration, ep.weekAired + 1, ep.number + 1);
         console.log(newEp);
         newEp.prevRating = ep.rating;
         newEp.prevShare = ep.share;
