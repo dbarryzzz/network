@@ -5,6 +5,8 @@ import { Grid, Header, Segment, Rail, Button, Icon } from 'semantic-ui-react'
 
 import EpisodeCard from './EpisodeCard';
 import GameInfoCard from './GameInfoCard';
+import EmptyTimeSlotCard from './EmptyTimeSlotCard';
+
 import * as actions from '../actions';
 import * as constants from '../constants';
 
@@ -30,15 +32,31 @@ class BigBoard extends Component{
     }
     
     buildDailyRow(day, i){
+        // TODO: make this less fugly
         var episodes = this.props.episodes.filter((ep) => ep.dayOfWeek == i);
-        var sortedEps = episodes.sort((a,b) => a.time - b.time);
-        return sortedEps.map(ep => 
-                        <Grid.Column key={day + ep.time} width={ep.duration * 2} >
-                            <EpisodeCard 
-                                episode={ep} 
-                                series={this.props.seriesById[ep.seriesId]}/>
-                        </Grid.Column>   
-        );       
+        var epObj = {};
+        var displayArray = [];
+        episodes.forEach(ep => {           
+            Object.assign(epObj, {[ep.time] : ep});
+        });
+
+        var t = 0;
+        while(t < constants.times.length){
+            var ep = epObj[t];
+            if(ep != undefined){
+                displayArray[t] = <Grid.Column key={day + t} width={ep.duration * 2} >
+                                    <EpisodeCard 
+                                        episode={ep} 
+                                        series={this.props.seriesById[ep.seriesId]}/>
+                                </Grid.Column>;
+                t = t + ep.duration;        
+            }else{
+                displayArray[t] = <Grid.Column key={day + t} width={2}><EmptyTimeSlotCard /></Grid.Column>
+                t = t+ 1;
+            }
+        }
+
+        return displayArray;
     }
 
     render() {
