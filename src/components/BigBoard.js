@@ -30,6 +30,11 @@ class BigBoard extends Component{
         console.log(newWeek);
         this.props.changeWeek(newWeek);
     }
+
+    removeEpisode(episode){
+        var week = this.props.gameInfo.activeWeek;
+        this.props.clickRemoveEpisode(episode, week);
+    }
     
     buildDailyRow(day, i){
         // TODO: make this less fugly
@@ -43,11 +48,13 @@ class BigBoard extends Component{
         var t = 0;
         while(t < constants.times.length){
             var ep = epObj[t];
-            if(ep != undefined){
+            if(ep !== undefined){
                 displayArray[t] = <Grid.Column key={day + t} width={ep.duration * 2} >
                                     <EpisodeCard 
                                         episode={ep} 
-                                        series={this.props.seriesById[ep.seriesId]}/>
+                                        series={this.props.seriesById[ep.seriesId]}
+                                        removeFunction = {this.removeEpisode.bind(this)}
+                                        />
                                 </Grid.Column>;
                 t = t + ep.duration;        
             }else{
@@ -161,6 +168,7 @@ const mapDispatchToProps  = (dispatch) =>{
         init: () => dispatch(actions.initGame()),
         runWeek: (activeEpisodes, seriesById, week) => dispatch(actions.runWeek(activeEpisodes, seriesById, week)),
         changeWeek: (newWeek) => dispatch(actions.changeWeek(newWeek)), 
+        clickRemoveEpisode: (episode, week) => dispatch(actions.removeEpisode(episode, week)),
     }
 }
 

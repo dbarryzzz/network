@@ -1,33 +1,45 @@
 import React from 'react'
-import { Card, Icon, Label } from 'semantic-ui-react'
 
-const EpisodeCard = ({episode, series}) => (
+import { Card, Icon, Label, Button, Popup } from 'semantic-ui-react'
+
+const EpisodeCard = ({ episode, series, removeFunction }) => (
     <Card>
         <Card.Content>
             <Card.Header><h4>{series.name}</h4></Card.Header>
             <Card.Meta>Ep # {episode.number} of {series.episodeCount} </Card.Meta>
             <Card.Description>
-                <Label>Quality</Label>
+                <Label basic color='blue'>Quality</Label>
                 {series.stats.totalQuality}
             </Card.Description>
-         </Card.Content>
-         <Card.Content extra>
+        </Card.Content>
+        <Card.Content extra>
             <div>
-                <Label>Rating/Share</Label>
+                <Label basic color='blue'>Rating/Share</Label>
                 {episode.rating} / {episode.share}
             </div>
             <div>
-                <Label>Buzz/Q/Fans</Label>
+                <Label basic color='blue'>Buzz/Q/Fans</Label>
                 {series.stats.buzz} / {series.stats.awareness} / {series.stats.fandom}
-                <br/>
+                <br />
             </div>
-         </Card.Content>
-         <Card.Content extra>
+        </Card.Content>
+        <Card.Content extra>
             <div>
-                {series.stats.flavors.map((f, i) => <Icon name={f.icon} color={f.color} size='large' key={i}/> )}
+                {series.stats.flavors.map((f, i) => <Icon name={f.icon} color={f.color} size='large' key={i} />)}
             </div>
-         </Card.Content>
-    </Card> 
+        </Card.Content>
+        <Card.Content>
+            <Popup
+                trigger={<Button basic icon='trash' color='black' onClick={() => removeFunction(episode)} />}
+                content='Remove from week'
+            />
+            <Popup
+                trigger={<Button basic icon='recycle' color='green'/>}
+                content='Air a rerun'
+            />        
+            
+        </Card.Content>
+    </Card>
 )
 
-export default EpisodeCard
+export default EpisodeCard;

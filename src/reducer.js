@@ -41,6 +41,18 @@ export default function reducer(state={
                 gameInfo: Object.assign({}, state.gameInfo, {activeWeek: action.week})
             }
         }
+        case actions.REMOVE_EPISODE: {
+            const { [action.episode.id]: value, ...updatedEpisodes } = state.allEpisodes.byId;
+            console.log(updatedEpisodes);
+            var filteredWeekEpisodes = state.weekInfo[action.week].episodes.filter(id => id !== action.episode.id);
+            console.log(filteredWeekEpisodes);
+            var updatedWeek = Object.assign({}, state.weekInfo[action.week], {episodes: filteredWeekEpisodes })
+            return {
+                ...state,
+                allEpisodes: {byId: updatedEpisodes},
+                weekInfo: Object.assign({}, state.weekInfo, {[action.week]: updatedWeek}),
+            }
+        }
         default: {
             return state;
         }

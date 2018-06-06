@@ -7,6 +7,7 @@ export const INIT_GAME = "INIT_GAME";
 export const UPDATE_EPISODES = "UPDATE_EPISODE_ARRAY";
 export const RUN_WEEK = "RUN_WEEK";
 export const CHANGE_WEEK = "CHANGE_WEEK";
+export const REMOVE_EPISODE = "REMOVE_EPISODE";
 
 
 export function initGame(){
@@ -84,6 +85,14 @@ export function changeWeek(newWeek){
     return {
         type: CHANGE_WEEK,
         week: newWeek,
+    }
+}
+
+export function removeEpisode(episode, week){
+    return {
+        type: REMOVE_EPISODE,
+        episode: episode,
+        week: week,
     }
 }
 
