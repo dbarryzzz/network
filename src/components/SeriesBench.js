@@ -13,7 +13,7 @@ const SeriesBench = ({benchSeries}) => (
                                 <List.Content floated="left">
                                     <Label horizontal>Name</Label>
                                 </List.Content>
-                                <List.Content floated="right">
+                                <List.Content floated="left">
                                     {s.name}
                                 </List.Content>
                             </List.Item>

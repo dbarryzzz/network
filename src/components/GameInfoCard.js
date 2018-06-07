@@ -6,22 +6,30 @@ const GameInfoCard = ({gameInfo}) => (
         <Card.Header><h4>Game</h4></Card.Header>
         <Card.Meta>{gameInfo? gameInfo.playerId : 0 }</Card.Meta>
         <Card.Description>
-                <List floated='left' relaxed >
+                <List relaxed >
                     <List.Item>
-                        <Label horizontal>Year</Label>
-                        {gameInfo ? gameInfo.year : 1999}
+                        <List.Content floated='left'>
+                            <Label horizontal>Year</Label>
+                            {gameInfo ? gameInfo.year : 1999}
+                        </List.Content>
                     </List.Item>
                     <List.Item>
-                        <Label horizontal>Money</Label>
-                        {gameInfo ? gameInfo.money : 0}
+                        <List.Content floated='left'>
+                            <Label horizontal>Money</Label>
+                            {gameInfo ? gameInfo.money : 0}
+                        </List.Content>
                     </List.Item>
                     <List.Item>
-                        <Label horizontal>Rank</Label>
-                        #X of Y
+                        <List.Content floated='left'>
+                            <Label horizontal>Rank</Label>
+                            #X of Y
+                        </List.Content>
                     </List.Item>
                     <List.Item>
-                        <Label horizontal>Total Weeks</Label>
-                        {gameInfo.totalWeeks}
+                        <List.Content floated='left'>
+                            <Label horizontal>Total Weeks</Label>
+                            {gameInfo.totalWeeks}
+                        </List.Content>
                     </List.Item>
 
                 </List>

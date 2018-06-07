@@ -40,7 +40,6 @@ class BigBoard extends Component{
         var activeSeriesIds = this.props.episodes.map(e => e.seriesId);
         var allSeriesArray = Object.values(this.props.seriesById);
         var filtered = allSeriesArray.filter(s => !activeSeriesIds.includes(s.id));
-        console.log(filtered);
         return filtered;
     }
     
@@ -150,8 +149,9 @@ class BigBoard extends Component{
                     </Rail>
                     <Rail attached internal position='right'>
                         <br/>
-                        <Segment>Other Shows</Segment>
-                        <SeriesBench benchSeries={Object.values(this.findBench())} />
+                        <Segment>
+                            <SeriesBench benchSeries={Object.values(this.findBench())} />
+                        </Segment>
                     </Rail>
                 </Segment>      
             </div>
