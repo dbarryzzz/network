@@ -6,6 +6,7 @@ import { Grid, Header, Segment, Rail, Button, Icon } from 'semantic-ui-react'
 import EpisodeCard from './EpisodeCard';
 import GameInfoCard from './GameInfoCard';
 import EmptyTimeSlotCard from './EmptyTimeSlotCard';
+import SeriesBench from './SeriesBench';
 
 import * as actions from '../actions';
 import * as constants from '../constants';
@@ -27,13 +28,20 @@ class BigBoard extends Component{
 
     incrementWeek(){
         var newWeek = Math.min(this.props.gameInfo.activeWeek + 1, this.props.gameInfo.totalWeeks);
-        console.log(newWeek);
         this.props.changeWeek(newWeek);
     }
 
     removeEpisode(episode){
         var week = this.props.gameInfo.activeWeek;
         this.props.clickRemoveEpisode(episode, week);
+    }
+
+    findBench(){
+        var activeSeriesIds = this.props.episodes.map(e => e.seriesId);
+        var allSeriesArray = Object.values(this.props.seriesById);
+        var filtered = allSeriesArray.filter(s => !activeSeriesIds.includes(s.id));
+        console.log(filtered);
+        return filtered;
     }
     
     buildDailyRow(day, i){
@@ -143,6 +151,7 @@ class BigBoard extends Component{
                     <Rail attached internal position='right'>
                         <br/>
                         <Segment>Other Shows</Segment>
+                        <SeriesBench benchSeries={Object.values(this.findBench())} />
                     </Rail>
                 </Segment>      
             </div>
@@ -151,7 +160,11 @@ class BigBoard extends Component{
 }
 
 function selectEpisodes(episodesById, weekInfo){
-    return weekInfo.episodes.map(id => episodesById[id]);
+    var episodes = [];
+    if(weekInfo.episodes){
+        episodes = weekInfo.episodes.map(id => episodesById[id]);
+    }
+    return episodes;
 }
 
 const mapStateToProps = (state) => {
