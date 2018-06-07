@@ -15,7 +15,7 @@ const GameInfoCard = ({gameInfo}) => (
                     </List.Item>
                     <List.Item>
                         <List.Content floated='left'>
-                            <Label horizontal>Money</Label>
+                            <Label horizontal>Cash</Label>
                             {gameInfo ? gameInfo.money : 0}
                         </List.Content>
                     </List.Item>
@@ -27,7 +27,7 @@ const GameInfoCard = ({gameInfo}) => (
                     </List.Item>
                     <List.Item>
                         <List.Content floated='left'>
-                            <Label horizontal>Total Weeks</Label>
+                            <Label horizontal>Weeks</Label>
                             {gameInfo.totalWeeks}
                         </List.Content>
                     </List.Item>
