@@ -1,26 +1,37 @@
 import React from 'react';
-import {Card, List, Label} from 'semantic-ui-react';
+import {Table, Icon, Popup, Header} from 'semantic-ui-react';
 
-const SeriesBench = ({benchSeries}) => (
-    <Card>
-        <Card.Header><h4>Series Bench</h4></Card.Header>
-        <Card.Meta>{benchSeries ?  benchSeries.length : 0} Shows</Card.Meta>
-        <Card.Description>
-                <List relaxed >
-                    {benchSeries &&
-                        benchSeries.map((s) => 
-                            <List.Item key={s.id} >
-                                <List.Content floated="left">
-                                    <Label horizontal>Name</Label>
-                                </List.Content>
-                                <List.Content floated="left">
-                                    {s.name}
-                                </List.Content>
-                            </List.Item>
-                        )}
-                </List>
-         </Card.Description>
-    </Card> 
+const SeriesBench = ({benchSeries}) => (   
+    <div>   
+        <Header as='h3'>Series Bench</Header>
+        <Table celled striped>
+            <Table.Header>
+                <Table.Row>
+                    <Table.HeaderCell>Name</Table.HeaderCell>
+                    <Table.HeaderCell>Duration</Table.HeaderCell>
+                    <Table.HeaderCell>Ep Count</Table.HeaderCell>
+                    <Table.HeaderCell>Info</Table.HeaderCell>
+                </Table.Row>
+            </Table.Header>
+
+            <Table.Body>
+                {benchSeries && 
+                    benchSeries.map(s =>
+                        <Table.Row key={s.id}>
+                            <Table.Cell>{s.name}</Table.Cell>
+                            <Table.Cell>{s.duration * 30}  min</Table.Cell>
+                            <Table.Cell>{s.episodesAired} of {s.episodesOrdered}</Table.Cell>
+                            <Table.Cell>
+                                <Popup 
+                                    trigger={<Icon name="info circle" color="blue" />}
+                                    content="More info about the show" />
+                            </Table.Cell>
+                        </Table.Row>
+                    )
+                }
+            </Table.Body>
+        </Table>
+    </div>
 )
 
 export default SeriesBench;
