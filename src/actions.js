@@ -8,6 +8,7 @@ export const UPDATE_EPISODES = "UPDATE_EPISODE_ARRAY";
 export const RUN_WEEK = "RUN_WEEK";
 export const CHANGE_WEEK = "CHANGE_WEEK";
 export const REMOVE_EPISODE = "REMOVE_EPISODE";
+export const ADD_EPISODE = "ADD_EPISODE";
 
 
 export function initGame(){
@@ -41,6 +42,7 @@ export function initGame(){
             initialSeries[series.id] = series;
 
             var episode = buildEmptyEpisode(series.id, d, t, duration, 1, 1);
+            series.episodesAired++;
             initialEpisodes[episode.id] = episode;
             t += duration;
         }
@@ -59,6 +61,7 @@ export function initGame(){
 
 export function runWeek(activeEpisodeArray, allSeries, week){
     var updatedEpisodes = RatingsService.runWeek(activeEpisodeArray, allSeries, week);
+    var updatedSeriesById = {};
     
     // TODO: update series stats
 
@@ -71,6 +74,9 @@ export function runWeek(activeEpisodeArray, allSeries, week){
         newEp.prevShare = ep.share;
 
         newEpisodes[newEp.id] = newEp;
+
+        var series = allSeries[ep.seriesId];
+        updatedSeriesById[series.id] = Object.assign({}, series, {episodesAired: series.episodesAired + 1});
     });
 
     return {
@@ -78,6 +84,7 @@ export function runWeek(activeEpisodeArray, allSeries, week){
         weekRun: week,
         updatedEpisodesById: updatedEpisodes,
         newEpisodesById: newEpisodes,
+        updatedSeriesById: updatedSeriesById,
     }
 }
 
@@ -93,6 +100,18 @@ export function removeEpisode(episode, week){
         type: REMOVE_EPISODE,
         episode: episode,
         week: week,
+    }
+}
+
+export function addEpisode(series, week, day, time){
+    // add new episode
+    var newEpisode = buildEmptyEpisode(series.id, day, time, series.duration, week, series.episodesAired + 1);
+    // TODO:  remove epsidoe
+
+    return {
+        type: ADD_EPISODE,
+        episode: newEpisode,
+        week: week
     }
 }
 
@@ -125,6 +144,7 @@ function buildEmptyEpisode(seriesId, dayOfWeek, time, duration, weekAired, numbe
 function buildRandomSeries(networkId, counter, duration){
     var id = networkId + counter;
     var firstYear = 1950 + Math.floor(Math.random() * 70);
+    var episodesAired = 0;
     var episodeCount = 22;
     var seasons = Math.ceil(Math.random() * 10);
     var name = nameparts.partA[Math.floor(Math.random() * nameparts.partA.length)] 
@@ -136,7 +156,8 @@ function buildRandomSeries(networkId, counter, duration){
         seasons: seasons,
         duration: duration,
         networkId: networkId, 
-        episodeCount: episodeCount,
+        episodesAired: episodesAired,
+        episodesOrdered: episodeCount,
         stats: stats}
 }
 

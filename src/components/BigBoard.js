@@ -7,6 +7,7 @@ import EpisodeCard from './EpisodeCard';
 import GameInfoCard from './GameInfoCard';
 import EmptyTimeSlotCard from './EmptyTimeSlotCard';
 import SeriesBench from './SeriesBench';
+import AddEpisodeForm from './AddEpisodeForm';
 
 import * as actions from '../actions';
 import * as constants from '../constants';
@@ -36,11 +37,28 @@ class BigBoard extends Component{
         this.props.clickRemoveEpisode(episode, week);
     }
 
+    addEpisode(seriesId, day, time){
+        var week = this.props.gameInfo.activeWeek;
+        console.log(seriesId, day, time);
+        var series = this.props.seriesById[seriesId];
+        this.props.clickAddEpisode(series, week, day, time)
+    }
+
     findBench(){
         var activeSeriesIds = this.props.episodes.map(e => e.seriesId);
         var allSeriesArray = Object.values(this.props.seriesById);
-        var filtered = allSeriesArray.filter(s => !activeSeriesIds.includes(s.id));
-        return filtered;
+        return  allSeriesArray.filter(s => !activeSeriesIds.includes(s.id));
+    }
+
+    findOpenSpots(){
+        // var slotMap = {};
+        // this.props.episodes.forEach(ep => {
+        //     var start = ep.time;
+        //     for(var i = 0; i < ep.duration; i++){
+        //         Object.assign(slotMap, {[ep.dayofWeek]: {[start + i] : true }});
+        //     }
+        // })
+        // console.log(slotMap);
     }
     
     buildDailyRow(day, i){
@@ -152,6 +170,9 @@ class BigBoard extends Component{
                         <Segment>
                             <SeriesBench benchSeries={Object.values(this.findBench())} />
                         </Segment>
+                        <Segment>
+                            <AddEpisodeForm benchSeries={Object.values(this.findBench())} addFunction={this.addEpisode.bind(this)} />
+                        </Segment>
                     </Rail>
                 </Segment>      
             </div>
@@ -182,6 +203,7 @@ const mapDispatchToProps  = (dispatch) =>{
         runWeek: (activeEpisodes, seriesById, week) => dispatch(actions.runWeek(activeEpisodes, seriesById, week)),
         changeWeek: (newWeek) => dispatch(actions.changeWeek(newWeek)), 
         clickRemoveEpisode: (episode, week) => dispatch(actions.removeEpisode(episode, week)),
+        clickAddEpisode: (series, week, day, time) => dispatch(actions.addEpisode(series, week, day, time)),
     }
 }
 

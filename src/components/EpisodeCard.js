@@ -6,7 +6,7 @@ const EpisodeCard = ({ episode, series, removeFunction }) => (
     <Card>
         <Card.Content>
             <Card.Header><h4>{series.name}</h4></Card.Header>
-            <Card.Meta>Ep # {episode.number} of {series.episodeCount} </Card.Meta>
+            <Card.Meta>Ep # {episode.number} of {series.episodesOrdered} </Card.Meta>
             <Card.Description>
                 <Label basic color='blue'>Quality</Label>
                 {series.stats.totalQuality}

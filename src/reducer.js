@@ -24,7 +24,7 @@ export default function reducer(state={
             var currentWeekEpisodeIds = state.weekInfo[currentWeekId].episodes;
             var currentWeek = {[currentWeekId]: {id: currentWeekId, aired: true, episodes: currentWeekEpisodeIds}};
 
-            var nextWeekId = ++action.weekRun;
+            var nextWeekId = action.weekRun + 1;
             var nextWeekEpisodeIds = Object.keys(action.newEpisodesById);
             var nextWeek = {[nextWeekId] : {id: nextWeekId, aired: false, episodes : nextWeekEpisodeIds}};
 
@@ -33,6 +33,7 @@ export default function reducer(state={
                 gameInfo: Object.assign({}, state.gameInfo, {totalWeeks: nextWeekId}),
                 allEpisodes: {byId: Object.assign({}, state.allEpisodes.byId, action.updatedEpisodesById, action.newEpisodesById)},
                 weekInfo: Object.assign({}, state.weekInfo, currentWeek, nextWeek),
+                allSeries: {byId: Object.assign({}, state.allSeries.byId, action.updatedSeriesById)},
             }
         }
         case actions.CHANGE_WEEK: {
@@ -46,10 +47,26 @@ export default function reducer(state={
             console.log(updatedEpisodes);
             var filteredWeekEpisodes = state.weekInfo[action.week].episodes.filter(id => id !== action.episode.id);
             console.log(filteredWeekEpisodes);
-            var updatedWeek = Object.assign({}, state.weekInfo[action.week], {episodes: filteredWeekEpisodes })
+            var updatedWeek = Object.assign({}, state.weekInfo[action.week], {episodes: filteredWeekEpisodes });
+            var series = state.allSeries.byId[action.episode.seriesId];
+            series.episodesAired--;
+
             return {
                 ...state,
                 allEpisodes: {byId: updatedEpisodes},
+                weekInfo: Object.assign({}, state.weekInfo, {[action.week]: updatedWeek}),
+                allSeries: {byId: Object.assign({}, state.allSeries.byId, {[series.id]: series})},
+            }
+        }
+        case actions.ADD_EPISODE: {
+            var updatedEpisodes = state.weekInfo[action.week].episodes.concat(action.episode.id);
+            var updatedWeek = Object.assign({}, state.weekInfo[action.week], {episodes: updatedEpisodes});
+            var series = state.allSeries.byId[action.episode.seriesId];
+            series.episodesAired++;
+            return {
+                ...state,
+                allEpisodes: {byId: Object.assign({}, state.allEpisodes.byId, {[action.episode.id]: action.episode})},
+                allSeries: {byId: Object.assign({}, state.allSeries.byId, {[series.id]: series})},
                 weekInfo: Object.assign({}, state.weekInfo, {[action.week]: updatedWeek}),
             }
         }
