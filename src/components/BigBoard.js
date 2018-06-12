@@ -41,7 +41,8 @@ class BigBoard extends Component{
         var week = this.props.gameInfo.activeWeek;
         console.log(seriesId, day, time);
         var series = this.props.seriesById[seriesId];
-        this.props.clickAddEpisode(series, week, day, time)
+        console.log(this.props.episodes);
+        this.props.clickAddEpisode(series, week, day, time, this.props.episodes);
     }
 
     findBench(){
@@ -203,7 +204,7 @@ const mapDispatchToProps  = (dispatch) =>{
         runWeek: (activeEpisodes, seriesById, week) => dispatch(actions.runWeek(activeEpisodes, seriesById, week)),
         changeWeek: (newWeek) => dispatch(actions.changeWeek(newWeek)), 
         clickRemoveEpisode: (episode, week) => dispatch(actions.removeEpisode(episode, week)),
-        clickAddEpisode: (series, week, day, time) => dispatch(actions.addEpisode(series, week, day, time)),
+        clickAddEpisode: (series, week, day, time, fullWeekEpisodes) => dispatch(actions.addEpisode(series, week, day, time, fullWeekEpisodes)),
     }
 }
 

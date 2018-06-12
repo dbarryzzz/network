@@ -59,14 +59,34 @@ export default function reducer(state={
             }
         }
         case actions.ADD_EPISODE: {
-            var updatedEpisodes = state.weekInfo[action.week].episodes.concat(action.episode.id);
-            var updatedWeek = Object.assign({}, state.weekInfo[action.week], {episodes: updatedEpisodes});
+            var idsToRemove = action.removedEpisodeArray.map(e => e.id);
+            // update week
+            var updatedEpisodeIdArray = state.weekInfo[action.week].episodes.concat(action.episode.id);
+            var updatedEpisodeIdArray = updatedEpisodeIdArray.filter(id => !idsToRemove.includes(id));
+            var updatedWeek = Object.assign({}, state.weekInfo[action.week], {episodes: updatedEpisodeIdArray});
+
+            // update all episodes 
+            var allEps = Object.values(state.allEpisodes.byId).reduce((acc, ep, i) => {
+                if(!idsToRemove.includes(ep.id)){
+                    acc[ep.id] = state.allEpisodes.byId[ep.id];
+                }
+                return acc;
+            }, {} ); 
+            allEps[action.episode.id] = action.episode;
+
+            // update series episode counts
+            var updatedSeriesObj = {}
             var series = state.allSeries.byId[action.episode.seriesId];
-            series.episodesAired++;
+            Object.assign(updatedSeriesObj, {[series.id]: Object.assign({}, series, {episodesAired: series.episodesAired + 1})});
+            action.removedEpisodeArray.forEach(ep => {
+                var series = state.allSeries.byId[ep.seriesId];
+                Object.assign(updatedSeriesObj, {[series.id]: Object.assign({}, series, {episodesAired: series.episodesAired - 1})});
+            })
+
             return {
                 ...state,
-                allEpisodes: {byId: Object.assign({}, state.allEpisodes.byId, {[action.episode.id]: action.episode})},
-                allSeries: {byId: Object.assign({}, state.allSeries.byId, {[series.id]: series})},
+                allEpisodes: {byId: allEps},
+                allSeries: {byId: Object.assign({}, state.allSeries.byId, updatedSeriesObj)},
                 weekInfo: Object.assign({}, state.weekInfo, {[action.week]: updatedWeek}),
             }
         }

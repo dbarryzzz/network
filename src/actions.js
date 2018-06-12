@@ -103,14 +103,27 @@ export function removeEpisode(episode, week){
     }
 }
 
-export function addEpisode(series, week, day, time){
+export function addEpisode(series, week, day, time, fullWeekEpisodes){
     // add new episode
     var newEpisode = buildEmptyEpisode(series.id, day, time, series.duration, week, series.episodesAired + 1);
-    // TODO:  remove epsidoe
+    // TODO:  remove episode
+    var removedEpisodeArray = [];
+    var dailyEpisodes = fullWeekEpisodes.filter(e => e.dayOfWeek == day);
+    dailyEpisodes.forEach(e => {
+        console.log(e);
+        if(!(
+            ( (e.time + e.duration) <= newEpisode.time )
+            || 
+            (e.time >= (newEpisode.time + newEpisode.duration))
+            )){
+                removedEpisodeArray.push(e);
+        }
+    });
 
     return {
         type: ADD_EPISODE,
         episode: newEpisode,
+        removedEpisodeArray: removedEpisodeArray, 
         week: week
     }
 }
