@@ -11,9 +11,9 @@ export const REMOVE_EPISODE = "REMOVE_EPISODE";
 export const ADD_EPISODE = "ADD_EPISODE";
 
 
-export function initGame(){
-    var playerId = constants.networks[Math.floor(Math.random() * constants.networks.length)];
-    var year = 2000;
+export function initGame(playerId, year, numOpponents){
+    // var playerId = constants.networks[Math.floor(Math.random() * constants.networks.length)];
+    // var year = 2000;
     var money = 200000;
     var activeWeek = 1;
 
@@ -69,7 +69,6 @@ export function runWeek(activeEpisodeArray, allSeries, week){
     var newEpisodes = {};
     Object.values(updatedEpisodes).forEach(ep => {
         var newEp = buildEmptyEpisode(ep.seriesId, ep.dayOfWeek, ep.time, ep.duration, ep.weekAired + 1, ep.number + 1);
-        console.log(newEp);
         newEp.prevRating = ep.rating;
         newEp.prevShare = ep.share;
 

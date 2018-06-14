@@ -14,9 +14,9 @@ import * as constants from '../constants';
 
 class BigBoard extends Component{
 
-    componentDidMount(){
-        this.props.init();
-    }
+    // componentDidMount(){
+    //     this.props.init();
+    // }
 
     processWeek(){
         this.props.runWeek(this.props.episodes, this.props.seriesById, this.props.gameInfo.activeWeek);

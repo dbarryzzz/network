@@ -1,11 +1,12 @@
 import * as actions from "./actions";
+import * as constants from "./constants";
 
 
 export default function reducer(state={
     allEpisodes : {byId: {}},
     allSeries: {byId: {}},
     weekInfo: {1: {id: 1, aired: false, episodes: []}},
-    gameInfo: {activeWeek: 1}
+    gameInfo: {activeWeek: 1, activeBoard: constants.START_BOARD}
 }, action) {
     // case statements here
     console.log(action);
@@ -13,7 +14,7 @@ export default function reducer(state={
         case actions.INIT_GAME: {
             return {
                 ...state,
-                gameInfo: action.gameInfo,
+                gameInfo: Object.assign({}, action.gameInfo, {activeBoard: constants.BIG_BOARD}),
                 weekInfo: action.initialWeekInfo,
                 allSeries: {byId: Object.assign({}, state.allSeries.byId, action.seriesById)},
                 allEpisodes: {byId: Object.assign({}, state.allEpisodes.byId, action.episodesById)}
