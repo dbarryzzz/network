@@ -4,6 +4,7 @@ import * as nameparts from './randomNames';
 import * as RatingsService from './services/RatingsService';
 
 export const INIT_GAME = "INIT_GAME";
+export const UPDATE_BOARD ="UPDATE_BOARD";
 export const UPDATE_EPISODES = "UPDATE_EPISODE_ARRAY";
 export const RUN_WEEK = "RUN_WEEK";
 export const CHANGE_WEEK = "CHANGE_WEEK";
@@ -12,8 +13,8 @@ export const ADD_EPISODE = "ADD_EPISODE";
 
 
 export function initGame(playerId, year, numOpponents){
-    // var playerId = constants.networks[Math.floor(Math.random() * constants.networks.length)];
-    // var year = 2000;
+    var playerId = constants.networks[Math.floor(Math.random() * constants.networks.length)];
+    var year = 2000;
     var money = 200000;
     var activeWeek = 1;
 
@@ -56,6 +57,13 @@ export function initGame(playerId, year, numOpponents){
         initialWeekInfo: initialWeekInfo,
         episodesById: initialEpisodes,
         seriesById: initialSeries,
+    }
+}
+
+export function updateBoard(newBoard){
+    return {
+        type: UPDATE_BOARD,
+        newBoard: newBoard
     }
 }
 

@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { Grid, Header, Segment, Rail, Button, Icon } from 'semantic-ui-react'
 
 import EpisodeCard from './EpisodeCard';
-import GameInfoCard from './GameInfoCard';
 import EmptyTimeSlotCard from './EmptyTimeSlotCard';
 import SeriesBench from './SeriesBench';
 import AddEpisodeForm from './AddEpisodeForm';
@@ -14,9 +13,9 @@ import * as constants from '../constants';
 
 class BigBoard extends Component{
 
-    // componentDidMount(){
-    //     this.props.init();
-    // }
+    componentDidMount(){
+        this.props.init();
+    }
 
     processWeek(){
         this.props.runWeek(this.props.episodes, this.props.seriesById, this.props.gameInfo.activeWeek);
@@ -159,13 +158,6 @@ class BigBoard extends Component{
                             )
                         )}
                     </Grid>
-
-                    <Rail attached internal position='left'>
-                        <br/>
-                        <Segment>
-                            <GameInfoCard gameInfo={this.props.gameInfo} />
-                        </Segment>
-                    </Rail>
                     <Rail attached internal position='right'>
                         <br/>
                         <Segment>

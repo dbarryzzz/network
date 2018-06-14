@@ -6,7 +6,7 @@ export default function reducer(state={
     allEpisodes : {byId: {}},
     allSeries: {byId: {}},
     weekInfo: {1: {id: 1, aired: false, episodes: []}},
-    gameInfo: {activeWeek: 1, activeBoard: constants.START_BOARD}
+    gameInfo: {activeWeek: 1, activeBoard: constants.BIG_BOARD}
 }, action) {
     // case statements here
     console.log(action);
@@ -18,6 +18,12 @@ export default function reducer(state={
                 weekInfo: action.initialWeekInfo,
                 allSeries: {byId: Object.assign({}, state.allSeries.byId, action.seriesById)},
                 allEpisodes: {byId: Object.assign({}, state.allEpisodes.byId, action.episodesById)}
+            }
+        }
+        case actions.UPDATE_BOARD: {
+            return {
+                ...state,
+                gameInfo: Object.assign({}, state.gameInfo, {activeBoard: action.newBoard}),
             }
         }
         case actions.RUN_WEEK: {
