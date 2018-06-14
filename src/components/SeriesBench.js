@@ -1,5 +1,28 @@
 import React from 'react';
-import {Table, Icon, Popup, Header} from 'semantic-ui-react';
+import {Table, Icon, Popup, Header, List} from 'semantic-ui-react';
+
+const MoreInfo = ({series}) => (
+    <List>
+        <List.Item>
+            <List.Content>
+                <List.Header>Quality</List.Header>
+                <List.Description>{series.stats.totalQuality}</List.Description>
+            </List.Content>
+        </List.Item>
+        <List.Item>
+            <List.Content>
+                <List.Header>Buzz/Q/Fans</List.Header>
+                <List.Description>{series.stats.buzz} / {series.stats.awareness} / {series.stats.fandom}</List.Description>
+            </List.Content>
+        </List.Item>
+        <List.Item>
+            <List.Content>
+                <List.Header>Flavor</List.Header>
+                <List.Description>{series.stats.flavors.map((f, i) => <Icon name={f.icon} color={f.color} size='large' key={i} />)}</List.Description>
+            </List.Content>
+        </List.Item>
+    </List>
+)
 
 const SeriesBench = ({benchSeries}) => (   
     <div>   
@@ -24,7 +47,8 @@ const SeriesBench = ({benchSeries}) => (
                             <Table.Cell>
                                 <Popup 
                                     trigger={<Icon name="info circle" color="blue" />}
-                                    content="More info about the show" />
+                                    content={<MoreInfo series = {s} />} 
+                                />
                             </Table.Cell>
                         </Table.Row>
                     )
