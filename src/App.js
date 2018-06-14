@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-//import { Grid} from 'semantic-ui-react';
 
 import './style/App.css';
 
@@ -14,6 +13,10 @@ import MainMenu from './components/MainMenu';
 
 
 class App extends Component {
+
+  componentDidMount(){
+    this.props.init();
+  }
 
   render() {
     console.log(this.props);
@@ -48,6 +51,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps  = (dispatch) =>{
   return {
+      init: () => dispatch(actions.initGame()),
       startGame: (playerId, year, numOpponents) => dispatch(actions.initGame(playerId, year, numOpponents)),
       updateBoard: (newBoard) => dispatch(actions.updateBoard(newBoard)),
   }

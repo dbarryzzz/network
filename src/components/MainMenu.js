@@ -9,9 +9,8 @@ export default class MainMenu extends Component {
 
     render(){
         return (
-            <Menu pointing secondary >
+            <Menu color='blue'>
                 <Menu.Item name={constants.BIG_BOARD} 
-                    header
                     active={this.props.activeBoard === constants.BIG_BOARD}
                     onClick={this.handleClick}>
                     Big Board 
