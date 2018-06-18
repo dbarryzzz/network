@@ -7,6 +7,7 @@ import EpisodeCard from './EpisodeCard';
 import EmptyTimeSlotCard from './EmptyTimeSlotCard';
 import SeriesBench from './SeriesBench';
 import AddEpisodeForm from './AddEpisodeForm';
+import GameInfoCard from './GameInfoCard';
 
 import * as actions from '../actions';
 import * as constants from '../constants';
@@ -154,6 +155,12 @@ class BigBoard extends Component{
                             )
                         )}
                     </Grid>
+                    <Rail attached internal position='left'>
+                        <br/>
+                        <Segment>
+                            <GameInfoCard gameInfo={this.props.gameInfo} />
+                        </Segment>
+                    </Rail>
                     <Rail attached internal position='right'>
                         <br/>
                         <Segment>
@@ -188,7 +195,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps  = (dispatch) =>{
     return {
-        init: () => dispatch(actions.initGame()),
         runWeek: (activeEpisodes, seriesById, week) => dispatch(actions.runWeek(activeEpisodes, seriesById, week)),
         changeWeek: (newWeek) => dispatch(actions.changeWeek(newWeek)), 
         clickRemoveEpisode: (episode, week) => dispatch(actions.removeEpisode(episode, week)),
